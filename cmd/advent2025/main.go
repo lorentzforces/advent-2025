@@ -1,7 +1,8 @@
 package main
 
-import "fmt"
+import "github.com/lorentzforces/advent-2024/internal/run"
 
 func main() {
-	fmt.Println("Call me Ishmael.")
+	err := run.CreateRootCmd().Execute()
+	run.FailOnErr(err)
 }
