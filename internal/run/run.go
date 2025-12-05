@@ -12,10 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const (
-	optionInputPath = "input-path"
-	optionVerbose = "verbose"
-)
+const optionInputPath = "input-path"
 
 func CreateRootCmd() *cobra.Command {
 	rootCmd := &cobra.Command{
@@ -36,12 +33,6 @@ func CreateRootCmd() *cobra.Command {
 		"i",
 		"",
 		"path to a directory where puzzle input files can be found",
-	)
-	rootCmd.Flags().BoolP(
-		optionVerbose,
-		"v",
-		false,
-		"Show verbose output for solution processes.",
 	)
 
 	return rootCmd

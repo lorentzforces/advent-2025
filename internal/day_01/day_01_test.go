@@ -26,3 +26,10 @@ func TestPartOneSampleInput(t *testing.T) {
 	puzzle_tools.BailIfFailed(t)
 	assert.Equal(t, 3, result)
 }
+
+func TestPartTwoSampleInput(t *testing.T) {
+	result, err := PartTwo(testInput)
+	assert.NoError(t, err)
+	puzzle_tools.BailIfFailed(t)
+	assert.Equal(t, 6, result)
+}

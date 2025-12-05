@@ -23,6 +23,35 @@ func PartOne(input string) (int, error) {
 	return stopsAtZero, nil
 }
 
+func PartTwo(input string) (int, error) {
+	moves, err := parseMoves(input)
+	if err != nil { return 0, err }
+
+	pointsAtZero := 0
+	dial := 50
+	for _, move := range moves {
+		startingValue := dial
+		fullRotations := move / 100
+		pointsAtZero += max(fullRotations, -fullRotations)
+
+		remainder := move - (fullRotations * 100)
+		dial += remainder
+		if dial == 0 {
+			pointsAtZero++
+		} else if dial < 0 {
+			if startingValue != 0 {
+				pointsAtZero++
+			}
+			dial += 100
+		} else if dial > 99 {
+			pointsAtZero++
+			dial -= 100
+		}
+	}
+
+	return pointsAtZero, nil
+}
+
 func parseMoves(s string) ([]int, error) {
 	lines := puzzle_tools.AsLines(s)
 	moves := make([]int, 0, len(lines))
