@@ -1,5 +1,12 @@
 package run
 
+type PuzzleData struct {
+	Day int
+	Part int
+	InputFile string
+	Fn PuzzleRunFunc
+}
+
 var listOfPuzzles = []PuzzleData{
 }
 
