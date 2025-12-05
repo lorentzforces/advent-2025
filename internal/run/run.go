@@ -7,8 +7,6 @@ import (
 	"path"
 	"slices"
 	"strconv"
-	"strings"
-	"testing"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -115,7 +113,7 @@ func runExercises(cmd *cobra.Command, args []string) error {
 	if len(args) > 1 {
 		part, err = strconv.Atoi(args[1])
 		if err != nil {
-			return fmt.Errorf("Invalid part value: \"\"", args[1])
+			return fmt.Errorf("Invalid part value: \"%s\"", args[1])
 		}
 	}
 
@@ -135,7 +133,9 @@ func runExercises(cmd *cobra.Command, args []string) error {
 		FailOut("No puzzles were found for specified day/part")
 	}
 
-	inputs, err := loadInputs(inputPath, puzzlesToRun)
+	// for now we don't care about inputs and will let the individual puzzle run complain that it
+	// doesn't have an input available
+	inputs, _ := loadInputs(inputPath, puzzlesToRun)
 
 	results := make([]puzzleResult, 0, len(puzzlesToRun))
 	for _, puzzle := range puzzlesToRun {
@@ -143,12 +143,19 @@ func runExercises(cmd *cobra.Command, args []string) error {
 		result.day = puzzle.Day
 		result.part = puzzle.Part
 
+		puzzleInput, present := inputs[puzzle.InputFile]
+		if present {
+			start := time.Now()
+			output, err := puzzle.Fn(puzzleInput)
+			result.duration= time.Since(start)
+			result.err = err
+			result.output = fmt.Sprint(output)
+		} else {
+			result.err = fmt.Errorf("Input file not present: %s", puzzle.InputFile)
+			result.duration = 0
+		}
 
-		start := time.Now()
-		output, err := puzzle.Fn(inputs[puzzle.InputFile])
-		result.duration= time.Since(start)
-		result.err = err
-		result.output = fmt.Sprint(output)
+		results = append(results, result)
 	}
 
 	slices.SortFunc(results, func(a, b puzzleResult) int {
@@ -165,7 +172,7 @@ func runExercises(cmd *cobra.Command, args []string) error {
 		}
 	}
 
-	return fmt.Errorf("Not yet implemented")
+	return nil
 }
 
 func loadInputs(inputPath string, puzzles []PuzzleData) (map[string]string, error) {
@@ -194,34 +201,4 @@ func getFileContents(path string) (string, error) {
 	fileBuf, err := os.ReadFile(path)
 	if err != nil { return "", err }
 	return string(fileBuf), nil
-}
-
-func AsLines(s string) []string {
-	lines := strings.Split(s, "\n")
-
-	// trim trailing blank line (expected)
-	if lines[len(lines) - 1] == "" {
-		lines = lines[0:len(lines) - 1]
-	}
-	return lines
-}
-
-func AsLinesSplitOnBlanks(s string) [][]string {
-	lines := AsLines(s)
-
-	splits := make([][]string, 0, 1)
-	start := 0
-	for i, line := range lines {
-		if line == "" {
-			splits = append(splits, lines[start:i])
-			start = i + 1
-		}
-	}
-
-	splits = append(splits, lines[start:])
-	return splits
-}
-
-func BailIfFailed(t *testing.T) {
-	if t.Failed() { t.FailNow() }
 }

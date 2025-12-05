@@ -17,6 +17,6 @@ clean:
 	rm -f ./advent2025
 .PHONY: clean
 
-test:
+check:
 	go test ./...
-.PHONY: test
+.PHONY: check

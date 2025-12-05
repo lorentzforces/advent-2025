@@ -1,5 +1,7 @@
 package run
 
+import "github.com/lorentzforces/advent-2025/internal/day_01"
+
 type PuzzleData struct {
 	Day int
 	Part int
@@ -8,20 +10,10 @@ type PuzzleData struct {
 }
 
 var listOfPuzzles = []PuzzleData{
-}
-
-type puzzleCollection = map[int]map[int]PuzzleData
-
-func getPuzzleCollection() puzzleCollection {
-	collection := make(puzzleCollection)
-	for _, puzzle := range listOfPuzzles {
-		day, dayExists := collection[puzzle.Day]
-		if !dayExists {
-			collection[puzzle.Day] = make(map[int]PuzzleData)
-			day, _ = collection[puzzle.Day]
-		}
-
-		day[puzzle.Part] = puzzle
-	}
-	return collection
+	{
+		Day: 1,
+		Part: 1,
+		InputFile: "day1-input.txt",
+		Fn: func(s string) (any, error) { return day_01.PartOne(s) },
+	},
 }
