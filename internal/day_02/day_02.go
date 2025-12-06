@@ -3,6 +3,7 @@ package day_02
 import (
 	"fmt"
 	"math"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -29,14 +30,18 @@ func PartTwo(input string) (uint, error) {
 	rangePairs, err := parseRangePairs(strings.TrimSuffix(input, "\n"))
 	if err != nil { return 0, err }
 
+	totalItemCount := uint(0)
 	runningTotal := uint(0)
 	for _, rangePair := range rangePairs {
+		totalItemCount += rangePair.right - rangePair.left
 		for i := rangePair.left; i <= rangePair.right; i++ {
-			if isRepeatedDigitsNumber(i) {
+			if isRepeatedDigitsNumberQuant(i) {
 				runningTotal += i
 			}
 		}
 	}
+
+	fmt.Fprintf(os.Stderr, "Considered %d total items over all ranges\n", totalItemCount)
 
 	return runningTotal, nil
 }
@@ -187,6 +192,38 @@ func tenToPower(n uint) uint {
 	return val
 }
 
+// quantitative method for determining if a number is a repeated digit pattern
+func isRepeatedDigitsNumberQuant(n uint) bool {
+	digitCount := int(numDigits(n))
+
+	digitsMask := uint(1)
+	for i := 1; i <= digitCount / 2; i++ {
+		digitsMask *= 10
+		// only evenly-divisible counts are valid since we're looking for fully-repeated elements
+		if digitCount % i != 0 {
+			continue
+		}
+
+		workingNumber := n
+		remainder := workingNumber % digitsMask
+		foundOnlyRepeats := true
+		for workingNumber > 0 {
+			newRemainder := workingNumber % digitsMask
+			if newRemainder != remainder {
+				foundOnlyRepeats = false
+				break
+			}
+			workingNumber = workingNumber / digitsMask
+		}
+		if foundOnlyRepeats {
+			return true
+		}
+	}
+
+	return false
+}
+
+// string-based method for determining if a number is a repeated digit pattern
 func isRepeatedDigitsNumber(n uint) bool {
 	stringVersion := fmt.Sprint(n)
 	// this is safe because we know this is all 1 byte ascii digit characters
@@ -200,5 +237,86 @@ func isRepeatedDigitsNumber(n uint) bool {
 			return true
 		}
 	}
+	return false
+}
+
+// slice-walking method for determing if a number is a repeated digit pattern
+func isRepeatedDigitsNumberCharSlice(n uint) bool {
+	numberChars := []rune(fmt.Sprint(n))
+
+	for i := 1; i <= len(numberChars) / 2; i++ {
+		// only evenly-divisible counts are valid since we're looking for fully-repeated elements
+		if len(numberChars) % i != 0 {
+			continue
+		}
+		isRepeatedSequence := true
+		for j := i; j < len(numberChars); j++ {
+			if numberChars[j] != numberChars[j % i] {
+				isRepeatedSequence = false
+				break
+			}
+		}
+		if isRepeatedSequence {
+			return true
+		}
+	}
+
+	return false
+}
+
+// slice-walking method for determing if a number is a repeated digit pattern
+// this version copied the subslice we're checking against so we don't dance around offsets
+// in a single slice
+func isRepeatedDigitsNumberCharSliceCopySubslice(n uint) bool {
+	numberChars := []rune(fmt.Sprint(n))
+
+	for i := 1; i <= len(numberChars) / 2; i++ {
+		// only evenly-divisible counts are valid since we're looking for fully-repeated elements
+		if len(numberChars) % i != 0 {
+			continue
+		}
+		subsequence := numberChars[:i]
+		isRepeatedSequence := true
+		for j := i; j < len(numberChars); j++ {
+			if numberChars[j] != subsequence[j % i] {
+				isRepeatedSequence = false
+				break
+			}
+		}
+		if isRepeatedSequence {
+			return true
+		}
+	}
+
+	return false
+}
+
+// slice-walking, but make it numeric instead of doing a string conversion
+func isRepeatedDigitsNumberNumSlice(n uint) bool {
+	digitCount := int(numDigits(n))
+	digits := make([]int, digitCount)
+	workingNumber := n
+	for i := range digitCount {
+		digits[digitCount - 1 - i] = int(workingNumber % 10)
+		workingNumber /= 10
+	}
+
+	for i := 1; i <= digitCount / 2; i++ {
+		// only evenly-divisible counts are valid since we're looking for fully-repeated elements
+		if digitCount % i != 0 {
+			continue
+		}
+		isRepeatedSequence := true
+		for j := i; j < digitCount; j++ {
+			if digits[j] != digits[j % i] {
+				isRepeatedSequence = false
+				break
+			}
+		}
+		if isRepeatedSequence {
+			return true
+		}
+	}
+
 	return false
 }

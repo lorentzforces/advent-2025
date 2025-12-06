@@ -26,10 +26,47 @@ func TestPartTwoSampleInput(t *testing.T) {
 	assert.Equal(t, uint(4174379265), result)
 }
 
+// the slowest - on my machine the associated puzzle solution took around 110 ms
 func TestRepeatedDigitsFunc(t *testing.T) {
 	assert.Equal(t, true, isRepeatedDigitsNumber(121212))
 	assert.Equal(t, false, isRepeatedDigitsNumber(12121))
 	assert.Equal(t, true, isRepeatedDigitsNumber(11))
 	assert.Equal(t, true, isRepeatedDigitsNumber(33333))
 	assert.Equal(t, true, isRepeatedDigitsNumber(100100100))
+}
+
+// by far the fastest by a factor of 3-4, usually taking around 35 ms
+func TestRepeatedDigitsQuantitativeFunc(t *testing.T) {
+	assert.Equal(t, true, isRepeatedDigitsNumberQuant(121212))
+	assert.Equal(t, false, isRepeatedDigitsNumberQuant(12121))
+	assert.Equal(t, true, isRepeatedDigitsNumberQuant(11))
+	assert.Equal(t, true, isRepeatedDigitsNumberQuant(33333))
+	assert.Equal(t, true, isRepeatedDigitsNumberQuant(100100100))
+}
+
+// consistently quicker than the initial version, but not by much (usually around 105 ms)
+func TestRepeatedDigitsSliceFunc(t *testing.T) {
+	assert.Equal(t, true, isRepeatedDigitsNumberCharSlice(121212))
+	assert.Equal(t, false, isRepeatedDigitsNumberCharSlice(12121))
+	assert.Equal(t, true, isRepeatedDigitsNumberCharSlice(11))
+	assert.Equal(t, true, isRepeatedDigitsNumberCharSlice(33333))
+	assert.Equal(t, true, isRepeatedDigitsNumberCharSlice(100100100))
+}
+
+// essentially the same as the above (usually around 105 ms)
+func TestRepeatedDigitsSliceCopySubsliceFunc(t *testing.T) {
+	assert.Equal(t, true, isRepeatedDigitsNumberCharSliceCopySubslice(121212))
+	assert.Equal(t, false, isRepeatedDigitsNumberCharSliceCopySubslice(12121))
+	assert.Equal(t, true, isRepeatedDigitsNumberCharSliceCopySubslice(11))
+	assert.Equal(t, true, isRepeatedDigitsNumberCharSliceCopySubslice(33333))
+	assert.Equal(t, true, isRepeatedDigitsNumberCharSliceCopySubslice(100100100))
+}
+
+// marginally faster than the others, hitting around 85 ms consistently
+func TestRepeatedDigitsNumSliceFunc(t *testing.T) {
+	assert.Equal(t, true, isRepeatedDigitsNumberNumSlice(121212))
+	assert.Equal(t, false, isRepeatedDigitsNumberNumSlice(12121))
+	assert.Equal(t, true, isRepeatedDigitsNumberNumSlice(11))
+	assert.Equal(t, true, isRepeatedDigitsNumberNumSlice(33333))
+	assert.Equal(t, true, isRepeatedDigitsNumberNumSlice(100100100))
 }
