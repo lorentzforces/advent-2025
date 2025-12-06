@@ -4,6 +4,7 @@ import (
 	"github.com/lorentzforces/advent-2025/internal/day_01"
 	"github.com/lorentzforces/advent-2025/internal/day_02"
 	"github.com/lorentzforces/advent-2025/internal/day_03"
+	"github.com/lorentzforces/advent-2025/internal/day_04"
 )
 
 type PuzzleData struct {
@@ -49,5 +50,11 @@ var listOfPuzzles = []PuzzleData{
 		Part: 2,
 		InputFile: "day3-input.txt",
 		Fn: func(s string) (any, error) { return day_03.PartTwo(s) },
+	},
+	{
+		Day: 4,
+		Part: 1,
+		InputFile: "day4-input.txt",
+		Fn: func(s string) (any, error) { return day_04.PartOne(s) },
 	},
 }
