@@ -31,4 +31,10 @@ var listOfPuzzles = []PuzzleData{
 		InputFile: "day2-input.txt",
 		Fn: func(s string) (any, error) { return day_02.PartOne(s) },
 	},
+	{
+		Day: 2,
+		Part: 2,
+		InputFile: "day2-input.txt",
+		Fn: func(s string) (any, error) { return day_02.PartTwo(s) },
+	},
 }

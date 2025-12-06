@@ -18,3 +18,18 @@ func TestPartOneSampleInput(t *testing.T) {
 	puzzle_tools.BailIfFailed(t)
 	assert.Equal(t, uint(1227775554), result)
 }
+
+func TestPartTwoSampleInput(t *testing.T) {
+	result, err := PartTwo(testInput)
+	assert.NoError(t, err)
+	puzzle_tools.BailIfFailed(t)
+	assert.Equal(t, uint(4174379265), result)
+}
+
+func TestRepeatedDigitsFunc(t *testing.T) {
+	assert.Equal(t, true, isRepeatedDigitsNumber(121212))
+	assert.Equal(t, false, isRepeatedDigitsNumber(12121))
+	assert.Equal(t, true, isRepeatedDigitsNumber(11))
+	assert.Equal(t, true, isRepeatedDigitsNumber(33333))
+	assert.Equal(t, true, isRepeatedDigitsNumber(100100100))
+}

@@ -8,7 +8,7 @@ import (
 )
 
 func PartOne(input string) (uint, error) {
-	rangePairs, err := parseRangePairs(strings.TrimSpace(input))
+	rangePairs, err := parseRangePairs(strings.TrimSuffix(input, "\n"))
 	if err != nil { return 0, err }
 
 	runningTotal := uint(0)
@@ -21,6 +21,24 @@ func PartOne(input string) (uint, error) {
 
 	return runningTotal, nil
 
+}
+
+// I overengineered the hell out of part 1; for this one I'm going full grug naive iteration mode
+// (it turns out the ranges aren't really that big)
+func PartTwo(input string) (uint, error) {
+	rangePairs, err := parseRangePairs(strings.TrimSuffix(input, "\n"))
+	if err != nil { return 0, err }
+
+	runningTotal := uint(0)
+	for _, rangePair := range rangePairs {
+		for i := rangePair.left; i <= rangePair.right; i++ {
+			if isRepeatedDigitsNumber(i) {
+				runningTotal += i
+			}
+		}
+	}
+
+	return runningTotal, nil
 }
 
 type rangePair struct {
@@ -167,4 +185,20 @@ func tenToPower(n uint) uint {
 		val *= 10
 	}
 	return val
+}
+
+func isRepeatedDigitsNumber(n uint) bool {
+	stringVersion := fmt.Sprint(n)
+	// this is safe because we know this is all 1 byte ascii digit characters
+	for i := 1; i <= len(stringVersion) / 2; i++ {
+		// only evenly-divisible counts are valid since we're looking for fully-repeated elements
+		if len(stringVersion) % i != 0 {
+			continue
+		}
+		count := strings.Count(stringVersion, stringVersion[0:i])
+		if count * i == len(stringVersion) {
+			return true
+		}
+	}
+	return false
 }
