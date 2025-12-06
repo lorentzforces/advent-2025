@@ -3,6 +3,7 @@ package run
 import (
 	"github.com/lorentzforces/advent-2025/internal/day_01"
 	"github.com/lorentzforces/advent-2025/internal/day_02"
+	"github.com/lorentzforces/advent-2025/internal/day_03"
 )
 
 type PuzzleData struct {
@@ -36,5 +37,11 @@ var listOfPuzzles = []PuzzleData{
 		Part: 2,
 		InputFile: "day2-input.txt",
 		Fn: func(s string) (any, error) { return day_02.PartTwo(s) },
+	},
+	{
+		Day: 3,
+		Part: 1,
+		InputFile: "day3-input.txt",
+		Fn: func(s string) (any, error) { return day_03.PartOne(s) },
 	},
 }
