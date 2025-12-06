@@ -18,6 +18,25 @@ func PartOne(input string) (int, error) {
 	return runningTotal, nil
 }
 
+func PartTwo(input string) (uint64, error) {
+	lines := puzzle_tools.AsLines(input)
+
+	runningTotal := uint64(0)
+	for _, line := range lines {
+		lineVal := uint64(0)
+		startingIndex := 0
+		for i := range 12 {
+			digit, foundIndex := findLargestInRange(line, startingIndex, len(line) - (11 - i))
+			startingIndex = foundIndex + 1
+			lineVal = lineVal * 10 + uint64(digit)
+		}
+
+		runningTotal += lineVal
+	}
+
+	return runningTotal, nil
+}
+
 // find the largest digit in the specified range
 // start is inclusive, end is exclusive
 func findLargestInRange(s string, start int, end int) (val int, index int) {
