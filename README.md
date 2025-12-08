@@ -2,7 +2,7 @@
 
 _**Advent of Code 2025**_
 
-Casual workthrough of puzzles from Advent of Code 2025. Using Golang again this year, and again will be attempting to do as much implementation as possible with the standard library. This year I'll be using a couple more libraries than previously; the CLI for this year's executable will be significantly more flexible.
+Casual workthrough of puzzles from Advent of Code 2025. Using Golang again this year, and again will be attempting to do as much implementation as possible with the standard library. This year I'll be using a couple more libraries than previously for the CLI plumbing, but solutions will be basically entirely only stdlib.
 
 ## Building the project
 
